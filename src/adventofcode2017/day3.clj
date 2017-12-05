@@ -1,5 +1,7 @@
 (ns adventofcode2017.day3)
 
+(defrecord Coordinate [x y])
+
 (defn bigger-or-eq-odd-square-root
   [loc]
   (let [root (int (Math/ceil (Math/sqrt loc)))]
@@ -20,16 +22,21 @@
   (let [lower-root (strict-smaller-odd-square-root loc)]
     (- (- loc (* lower-root lower-root)) 1)))
 
-(defn side-of-ring
+(defn size-of-ring
   [ring]
-  (+ (* ring 2) 1))
+  (* ring 8))
 
-(defn orth-steps
+(defn coor
   [loc]
-  (let [r (ring loc)]
-    (Math/abs (- (mod (+ (- (pos-on-ring loc) r -1) r) (* r 2)) r))))
+  (let [r (ring loc) p (pos-on-ring loc)] 
+    (let [s (size-of-ring r)]
+      (cond
+        (< p (* (/ s 4) 1)) (Coordinate. r (- p r -1))
+        (< p (* (/ s 4) 2)) (Coordinate. (- (* r 3) p 1) r)
+        (< p (* (/ s 4) 3)) (Coordinate. (- r) (- (* r 5) p 1))
+        (< p (* (/ s 4) 4)) (Coordinate. (- p (* r 7) -1) (- r))))))
 
 (defn spiral-distance
   [loc]
-  (if (= loc 1) 0 ;Math breaks down at the center :/
-    (+ (ring loc) (orth-steps loc))))
+  (let [c (coor loc)]
+    (+ (Math/abs (:x c)) (Math/abs (:y c)))))
