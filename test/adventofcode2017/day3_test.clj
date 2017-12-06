@@ -28,3 +28,19 @@
   (is (= 3 (spiral-distance 12)))
   (is (= 2 (spiral-distance 23)))
   (is (= 31 (spiral-distance 1024))))
+
+(defn summed-value-at
+  [loc]
+  (get (nth expanding-memory loc) (coor loc)))
+
+(deftest part-2
+  (is (= 1 (summed-value-at 1)))
+  (is (= 1 (summed-value-at 2)))
+  (is (= 2 (summed-value-at 3)))
+  (is (= 4 (summed-value-at 4)))
+  (is (= 5 (summed-value-at 5)))
+  (is (= 10 (summed-value-at 6)))
+  (is (= 11 (summed-value-at 7)))
+  (is (= 806 (summed-value-at 23)))
+  (is (= 4 (stress-test-up-to 3)))
+  (is (= 806 (stress-test-up-to 800))))
