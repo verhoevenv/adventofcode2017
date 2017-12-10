@@ -1,7 +1,5 @@
 (ns adventofcode2017.day5)
 
-(defrecord CpuState [instructions pointer])
-
 (defn jump 
   [pointer instructions]
   (+ pointer (get instructions pointer)))

@@ -5,6 +5,6 @@
 (deftest part-1
   (is (= 5 (jumps-needed [0 3 0 1 -3]))))
 
-(deftest part-1
+(deftest part-2
   (is (= 10 (jumps-needed-strange [0 3 0 1 -3]))))
   
