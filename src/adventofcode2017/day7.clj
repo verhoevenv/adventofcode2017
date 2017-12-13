@@ -24,7 +24,11 @@
 
 (defn immediately-holding?
   [p1 p2 listing]
-  (some #{p2} (:above (get listing p1))))
+  (some #{p2} (:above (get listing p1))))  
+
+(defn holding-none?
+  [program listing]
+  (empty? (:above (get listing program))))
 
 (defn indirectly-holding?
   [p1 p2 listing]
@@ -33,11 +37,6 @@
     (if (holding-none? p1 listing)
       false
       (some #(indirectly-holding? %1 p2 listing) (:above (get listing p1))))))
-  
-
-(defn holding-none?
-  [program listing]
-  (empty? (:above (get listing program))))
 
 (defn none-holding?
   [program listing]
