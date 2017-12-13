@@ -65,12 +65,22 @@
      (update mem m-reg m)
      mem)))
 
+(defn exec-all-expanded
+  [listing]
+  (reductions exec (init-mem (all-registries listing)) listing))
+
 (defn exec-all
   [listing]
-  (reduce exec (init-mem (all-registries listing)) listing))
+  (last (exec-all-expanded listing)))
 
 (defn largest-register-value
   [instructions-str]
   (let [listing (instrs instructions-str)]
   (let [end-mem (exec-all listing)]
     (apply max (vals end-mem)))))
+
+(defn largest-register-value-ever
+  [instructions-str]
+  (let [listing (instrs instructions-str)]
+  (let [mems (exec-all-expanded listing)]
+    (apply max (flatten (map vals mems))))))

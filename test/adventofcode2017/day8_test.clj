@@ -18,3 +18,7 @@
   (is (= {"a" -1} (exec  {"a" 0} (instr "a dec 1 if a < 5"))))
   (is (= {"a" 1 "b" 0 "c" -10} (exec-all (instrs example-instructions))))
   (is (= 1 (largest-register-value example-instructions))))
+
+(deftest part-2
+  (is (= 10 (largest-register-value-ever example-instructions))))
+  
