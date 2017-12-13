@@ -22,3 +22,15 @@
 
 (deftest part-1
   (is (= "tknk" (bottom example-list))))
+
+(deftest part-2
+  (is (= 66 (weight-of-tower "pbga" (progs example-list))))
+  (is (= 251 (weight-of-tower "ugml" (progs example-list))))
+  (is (= 243 (weight-of-tower "padx" (progs example-list))))
+  (is (= 243 (weight-of-tower "fwft" (progs example-list))))
+  (is (balanced? "pbga" (progs example-list)))
+  (is (balanced? "ugml" (progs example-list)))
+  (is (balanced? "padx" (progs example-list)))
+  (is (balanced? "fwft" (progs example-list)))
+  (is (not (balanced? "tknk" (progs example-list))))
+  (is (= 60 (needed-weight-for-balance (progs example-list)))))
