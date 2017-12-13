@@ -26,6 +26,15 @@
   [p1 p2 listing]
   (some #{p2} (:above (get listing p1))))
 
+(defn indirectly-holding?
+  [p1 p2 listing]
+  (or
+    (immediately-holding? p1 p2 listing)
+    (if (holding-none? p1 listing)
+      false
+      (some #(indirectly-holding? %1 p2 listing) (:above (get listing p1))))))
+  
+
 (defn holding-none?
   [program listing]
   (empty? (:above (get listing program))))
@@ -68,10 +77,14 @@
     (get different-map :odd)
     (get different-map :normal)))
 
+(defn highest-of-holding-programs
+  [prog-strs listing]
+  (reduce #(if (indirectly-holding? %1 %2 listing) %2 %1) prog-strs))
+
 ;not optimal but let's see if it works..
 (defn needed-weight-for-balance
   [listing]
-  (let [unbalanced (first (filter #(not (balanced? %1 listing)) (keys listing)))]
+  (let [unbalanced (highest-of-holding-programs (filter #(not (balanced? %1 listing)) (keys listing)) listing)]
   (let [weights-unbalanced (reduce #(assoc %1 %2 (weight-of-tower %2 listing)) {} (:above (get listing unbalanced)))]
   (let [weights-group (different-one (vals weights-unbalanced))]
   (let [weight-difference (delta-odd-norm weights-group)
