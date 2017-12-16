@@ -14,7 +14,7 @@
      [:accepting, \,]           (->MachineResult :accepting, :comma)
      [:accepting, \<]           (->MachineResult :garbage, :og)
      [:garbage, \>]             (->MachineResult :accepting, :cg)
-     [:garbage, :any]           (->MachineResult :garbage, nil)
+     [:garbage, :any]           (->MachineResult :garbage, :g)
      [:accepting, \!]           (->MachineResult :accepting-escaped, :esc)
      [:accepting-escaped, :any] (->MachineResult :accepting, nil)
      [:garbage, \!]             (->MachineResult :garbage-escaped, :esc)
@@ -45,20 +45,25 @@
 (def interesting-tokens
   #{:ob, :cb})
 
-(defn lex
+(defn brackets-lex
   [stream]
   (filter interesting-tokens (raw-lex stream)))
 
-(defn parse-token
+(defn count-groups-token
   [[current-depth groups] token]
   (case token
     :ob [(+ current-depth 1) groups]
     :cb [(- current-depth 1) (conj groups current-depth)]))
 
-(defn parse
+(defn count-groups
   [tokens]
-  (second (reduce parse-token [0 []] tokens)))
+  (second (reduce count-groups-token [0 []] tokens)))
 
 (defn score
   [stream]
-  (reduce + (parse (lex stream))))
+  (reduce + (count-groups (brackets-lex stream))))
+
+(defn count-garbage
+  [stream]
+  (count (filter #{:g} (raw-lex stream))))
+  
