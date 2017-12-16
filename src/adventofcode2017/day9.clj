@@ -49,10 +49,16 @@
   [stream]
   (filter interesting-tokens (raw-lex stream)))
 
+(defn parse-token
+  [[current-depth groups] token]
+  (case token
+    :ob [(+ current-depth 1) groups]
+    :cb [(- current-depth 1) (conj groups current-depth)]))
+
 (defn parse
   [tokens]
-  (reduce (fn [x] (if (= x :ob ) ))))
+  (second (reduce parse-token [0 []] tokens)))
 
 (defn score
   [stream]
-  0)
+  (reduce + (parse (lex stream))))
